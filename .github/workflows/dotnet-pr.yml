@@ -1,0 +1,30 @@
+name: PR - SDK build
+on:
+  pull_request:
+    branches:
+    - main
+jobs:
+  build:
+    runs-on: windows-2022
+    steps:
+    - name: Checking out Code
+      uses: actions/checkout@v2
+
+    - name: Installing .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.400
+        include-prerelease: false
+
+    - name: Restoring Packages
+      run: dotnet restore
+
+    - name: Building Project(s)
+      run: dotnet build --no-restore
+
+    - name: Publish CLI
+      run: dotnet publish ${{ github.workspace }}/MRLogs/MRLogs.csproj -c Release -o ${{ github.workspace }}/bins/
+
+
+    - name: Running Tests
+      run: dotnet test --no-build --verbosity normal
