@@ -17,13 +17,13 @@ jobs:
         include-prerelease: false
 
     - name: Restoring Packages
-      run: dotnet restore
+      run: dotnet restore ${{ github.workspace }}/src
 
     - name: Building Project(s)
       run: dotnet build --no-restore
 
     - name: Publish MRLogs
-      run: dotnet publish ${{ github.workspace }}/MRLogs/MRLogs.csproj -c Release -o ${{ github.workspace }}/bins/
+      run: dotnet publish ${{ github.workspace }}/src/MRLogs/MRLogs.csproj -c Release -o ${{ github.workspace }}/bins/
 
 
     - name: Running Tests
