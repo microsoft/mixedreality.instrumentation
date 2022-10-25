@@ -22,7 +22,7 @@ jobs:
     - name: Building Project(s)
       run: dotnet build --no-restore
 
-    - name: Publish CLI
+    - name: Publish MRLogs
       run: dotnet publish ${{ github.workspace }}/MRLogs/MRLogs.csproj -c Release -o ${{ github.workspace }}/bins/
 
 
