@@ -20,11 +20,11 @@ jobs:
       run: dotnet restore ${{ github.workspace }}/src
 
     - name: Building Project(s)
-      run: dotnet build --no-restore
+      run: dotnet build ${{ github.workspace }}/src --no-restore
 
     - name: Publish MRLogs
       run: dotnet publish ${{ github.workspace }}/src/MRLogs/MRLogs.csproj -c Release -o ${{ github.workspace }}/bins/
 
 
     - name: Running Tests
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test ${{ github.workspace }}/src --no-build --verbosity normal
