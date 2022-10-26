@@ -5,7 +5,7 @@ namespace MRLogs.Commands
 {
     public class CustomEventLogCommand : Command
     {
-        public CustomEventLogCommand() : base("custom-event-track", "Access and write logs for custom events")
+        public CustomEventLogCommand() : base("custom-event", "Access and write logs for custom events")
         {
             AddOption(new Option<string>("--name", "The name of the event.")
             {

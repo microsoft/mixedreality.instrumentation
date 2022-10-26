@@ -5,7 +5,7 @@ namespace MRLogs.Commands
 {
     public class RequestLogCommand : Command
     {
-        public RequestLogCommand() : base("request-track", "Access and write logs for requests to a service")
+        public RequestLogCommand() : base("request", "Access and write logs for requests to a service")
         {
             AddOption(new Option<string>("--name", "The name of the requested service.")
             {
