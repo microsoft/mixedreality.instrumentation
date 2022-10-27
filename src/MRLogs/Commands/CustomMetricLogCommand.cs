@@ -5,7 +5,7 @@ namespace MRLogs.Commands
 {
     public class CustomMetricLogCommand : Command
     {
-        public CustomMetricLogCommand() : base("custom-metric-track", "Access and write logs for custom metric") 
+        public CustomMetricLogCommand() : base("custom-metric", "Access and write logs for custom metric") 
         {
             AddOption(new Option<string>("--name", "The name of the metric.")
             {
