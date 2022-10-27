@@ -1,4 +1,10 @@
-﻿using Microsoft.Extensions.Logging;
+﻿// -----------------------------------------------------------------------
+// <copyright company="Microsoft">
+//     Copyright (c) Microsoft. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
+
+using Microsoft.Extensions.Logging;
 using Shift.Core.Commands;
 using Shift.Core.Models.Common;
 
