@@ -1,4 +1,10 @@
-﻿using MRLogs.Commands;
+﻿// -----------------------------------------------------------------------
+// <copyright company="Microsoft">
+//     Copyright (c) Microsoft. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
+
+using MRLogs.Commands;
 using System.CommandLine;
 
 namespace MRLogs
