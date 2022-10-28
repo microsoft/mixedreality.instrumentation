@@ -4,7 +4,10 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System.CommandLine;
+using System.CommandLine.NamingConventionBinder;
 
 namespace MRLogs.Commands
 {
@@ -16,6 +19,17 @@ namespace MRLogs.Commands
             {
                 IsRequired = true
             });
+            AddOption(new Option<string>("--message", "The message to log.")
+            {
+                IsRequired = true
+            });
+
+            Handler = CommandHandler.Create<ExceptionLogCommandHandlerInput, IHost, CancellationToken>(
+                async (input, host, cancellationToken) =>
+                {
+                    var handler = ActivatorUtilities.CreateInstance<ExceptionLogCommandHandler>(host.Services);
+                    return (int)await handler.ExecuteAsync(input, cancellationToken);
+                });
         }
     }
 }

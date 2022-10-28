@@ -11,10 +11,7 @@ using Shift.Core.Models.Common;
 namespace MRLogs.Commands
 {
     public sealed record TraceLogCommandHandlerInput(
-        string path,
-        string components,
-        string versions,
-        string bundle = null
+        string Message
         ) : BaseCommandHandlerInput;
 
     public class TraceLogCommandHandler : BaseCommandHandler<TraceLogCommandHandlerInput>

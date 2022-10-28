@@ -11,10 +11,8 @@ using Shift.Core.Models.Common;
 namespace MRLogs.Commands
 {
     public sealed record ExceptionLogCommandHandlerInput(
-        string path,
-        string components,
-        string versions,
-        string bundle = null
+        string Name,
+        string Message
         ) : BaseCommandHandlerInput;
 
     public class ExceptionLogCommandHandler : BaseCommandHandler<ExceptionLogCommandHandlerInput>
