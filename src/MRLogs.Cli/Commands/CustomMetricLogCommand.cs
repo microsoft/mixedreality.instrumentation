@@ -10,7 +10,7 @@ using System.CommandLine;
 using System.CommandLine.Completions;
 using System.CommandLine.NamingConventionBinder;
 
-namespace MRLogs.Commands
+namespace MRLogs.Cli.Commands
 {
     public class CustomMetricLogCommand : Command
     {
@@ -20,40 +20,18 @@ namespace MRLogs.Commands
             {
                 IsRequired = true
             });
-            AddOption(new Option<string>("--message", "The message to log.")
+            AddOption(new Option<double>(new string[] { "--metric-value", "-m" }, "Metric value")
             {
                 IsRequired = true
             });
+            AddOption(new Option<string>(new string[] { "--properties", "-p" }, "Named string values you can use to classify and filter metrics."));
 
             Handler = CommandHandler.Create<CustomMetricLogCommandHandlerInput, IHost, CancellationToken>(
                 async (input, host, cancellationToken) =>
                 {
                     var handler = ActivatorUtilities.CreateInstance<CustomMetricLogCommandHandler>(host.Services);
-                    return (int)await handler.ExecuteAsync(input, cancellationToken);
+                    await handler.ExecuteAsync(input, cancellationToken);
                 });
-        }
-
-        public override string? Description { get => base.Description; set => base.Description = value; }
-        public override string Name { get => base.Name; set => base.Name = value; }
-
-        public override bool Equals(object? obj)
-        {
-            return base.Equals(obj);
-        }
-
-        public override IEnumerable<CompletionItem> GetCompletions(CompletionContext context)
-        {
-            return base.GetCompletions(context);
-        }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-
-        public override string ToString()
-        {
-            return base.ToString();
         }
     }
 }

@@ -9,26 +9,24 @@ using Microsoft.Extensions.Hosting;
 using System.CommandLine;
 using System.CommandLine.NamingConventionBinder;
 
-namespace MRLogs.Commands
+namespace MRLogs.Cli.Commands
 {
     public class ExceptionLogCommand : Command
     {
         public ExceptionLogCommand() : base("exception", "Access and write logs for exceptions")
         {
-            AddOption(new Option<string>("--name", "The name of the exception.")
+            AddOption(new Option<string>("--exception-message", "The exception message to log")
             {
                 IsRequired = true
             });
-            AddOption(new Option<string>("--message", "The message to log.")
-            {
-                IsRequired = true
-            });
+            AddOption(new Option<string>("--properties", "Named string values you can use to classify and search for this exception."));
+            AddOption(new Option<string>("--metrics", "Additional values associated with this exception."));
 
             Handler = CommandHandler.Create<ExceptionLogCommandHandlerInput, IHost, CancellationToken>(
                 async (input, host, cancellationToken) =>
                 {
                     var handler = ActivatorUtilities.CreateInstance<ExceptionLogCommandHandler>(host.Services);
-                    return (int)await handler.ExecuteAsync(input, cancellationToken);
+                    await handler.ExecuteAsync(input, cancellationToken);
                 });
         }
     }
