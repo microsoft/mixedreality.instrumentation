@@ -4,30 +4,31 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using Microsoft.ApplicationInsights;
 using Microsoft.Extensions.Logging;
 using Shift.Core.Commands;
 using Shift.Core.Models.Common;
 
-namespace MRLogs.Commands
+namespace MRLogs.Cli.Commands
 {
     public sealed record RequestLogCommandHandlerInput(
         string Name,
-        string Message
+        DateTimeOffset StartTime,
+        TimeSpan Duration,
+        string ResponseCode,
+        bool Success
         ) : BaseCommandHandlerInput;
 
     public class RequestLogCommandHandler : BaseCommandHandler<RequestLogCommandHandlerInput>
     {
-        public RequestLogCommandHandler(ILogger logger) : base(logger)
-        {
-        }
-
         public RequestLogCommandHandler(ILogger logger, IServiceProvider serviceProvider) : base(logger, serviceProvider)
         {
         }
 
-        protected override Task<ShiftResultCode> ExecuteAsyncOverride(RequestLogCommandHandlerInput input, CancellationToken cancellationToken)
+        protected override Task ExecuteAsyncOverride(RequestLogCommandHandlerInput input, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            Telemetry.TrackRequest(input.Name, input.StartTime, input.Duration, input.ResponseCode, input.Success);
+            return Task.CompletedTask;
         }
     }
 }

@@ -10,17 +10,36 @@ using System.CommandLine;
 using System.CommandLine.Completions;
 using System.CommandLine.NamingConventionBinder;
 
-namespace MRLogs.Commands
+namespace MRLogs.Cli.Commands
 {
     public class RequestLogCommand : Command
     {
-        public RequestLogCommand() : base("request", "Access and write logs for requests to a service")
+        public RequestLogCommand() : base("request", "Send information about a request handled by the application.")
         {
-            AddOption(new Option<string>("--name", "The name of the requested service.")
+            /**
+             * string Name,
+        DateTimeOffset StartTime,
+        TimeSpan Duration,
+        string ResponseCode,
+        bool Success
+             * */
+            AddOption(new Option<string>("--name", "The request name.")
             {
                 IsRequired = true
             });
-            AddOption(new Option<string>("--message", "The message to log.")
+            AddOption(new Option<DateTimeOffset>("--start-time", "The time when the page was requested.")
+            {
+                IsRequired = true
+            });
+            AddOption(new Option<TimeSpan>("--duration", "The time taken by the application to handle the request.")
+            {
+                IsRequired = true
+            });
+            AddOption(new Option<string>("--response-code", "The response status code.")
+            {
+                IsRequired = true
+            });
+            AddOption(new Option<bool>("--success", "True if the request was handled successfully by the application.")
             {
                 IsRequired = true
             });
@@ -29,7 +48,7 @@ namespace MRLogs.Commands
                 async (input, host, cancellationToken) =>
                 {
                     var handler = ActivatorUtilities.CreateInstance<RequestLogCommandHandler>(host.Services);
-                    return (int)await handler.ExecuteAsync(input, cancellationToken);
+                    await handler.ExecuteAsync(input, cancellationToken);
                 });
         }
 
