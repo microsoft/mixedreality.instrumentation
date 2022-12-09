@@ -9,7 +9,10 @@ namespace MRLogs.Cli.Commands
 {
     public sealed class ProgramRootCommand : RootCommand
     {
-        public readonly string[] APP_INSIGHTS_OPTIONS = new string[] { "-c", "--app-insights-conection-string" };
+
+        public Option<string> AppInsightsOption = new Option<string>(new string[] { "-c", "--app-insights-conection-string" },
+                "The Connection String for logging telemetry to Application Insights");
+
         public ProgramRootCommand()
         {
 
@@ -20,11 +23,7 @@ namespace MRLogs.Cli.Commands
             AddCommand(new RequestLogCommand());
             AddCommand(new TraceLogCommand());
 
-            // Global options
-            //var appInsightsOption = new Option<string>(APP_INSIGHTS_OPTIONS,
-            //    "The Connection String for logging telemetry to Application Insights");
-
-            //AddGlobalOption(appInsightsOption);
+            AddGlobalOption(AppInsightsOption);
         }
     }
 }

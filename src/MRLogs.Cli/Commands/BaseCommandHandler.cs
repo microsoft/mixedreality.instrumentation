@@ -33,7 +33,6 @@ namespace MRLogs.Cli.Commands
         /// <param name="logger">Used to set logger for handler.</param>
         public BaseCommandHandler(ILogger logger)
         {
-            Console.WriteLine("Logger constructor");
             Logger = logger;
             Telemetry = new TelemetryClient(new Microsoft.ApplicationInsights.Extensibility.TelemetryConfiguration());
         }
@@ -41,10 +40,8 @@ namespace MRLogs.Cli.Commands
 
         public BaseCommandHandler(ILogger logger, IServiceProvider serviceProvider)
         {
-            Console.WriteLine("service provider constructor");
             Logger = logger;
             Telemetry = serviceProvider.GetRequiredService<TelemetryClient>();
-            Console.WriteLine($"{Telemetry.InstrumentationKey}\n{Telemetry.ToString()}");
             ServiceProvider = serviceProvider;
         }
 
@@ -76,6 +73,7 @@ namespace MRLogs.Cli.Commands
             finally
             {
                 Logger.LogTrace($"Stop_{GetType().Name}");
+                Telemetry.Flush();
             }
 
             //Logger.LogDebug($"{GetType().Name} completed with exit code: {result}");
