@@ -4,10 +4,10 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using CommandLine;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -24,29 +24,18 @@ using System.Runtime.CompilerServices;
 
 namespace MRLogs.Cli
 {
-    //public class Options
-    //{
-    //    [Option('c', "app-insights-connection-string", Required = false, HelpText = "Application Insights Connection String")]
-    //    public string ConnectionString { get; set; }
-    //}
-
     public class Program
     {
         public static async Task Main(string[] args)
         {
-
             // bind SIGINT and SIGTERM
             var cts = new CancellationTokenSource();
             Console.CancelKeyPress += (o, e) => cts.Cancel();
             AppDomain.CurrentDomain.ProcessExit += (o, e) => cts.Cancel();
-            Console.WriteLine($"{string.Join(", ", args)}");
+
             var rootCommand = new ProgramRootCommand();
-            //string connStr = "";
-            var exitCode = new CommandLineBuilder(rootCommand)
-                //.AddMiddleware(async (context, next) =>
-                //{
-                //    context.ParseResult.Directives.Con
-                //})
+
+            var exitCode = await new CommandLineBuilder(rootCommand)
                 .UseHost(
                     _ => Host.CreateDefaultBuilder(),
                     host =>
@@ -54,25 +43,15 @@ namespace MRLogs.Cli
                         host
                             .ConfigureServices((context, services) =>
                             {
-                                //string connStr = "";
-                                //CommandLine.Parser.Default.ParseArguments<Options>(args)
-                                //    .WithParsed(o => { 
-                                //        connStr = o.ConnectionString;
-                                //    });
-                                //Console.WriteLine($"connstring: {connStr}");
-                                //var results = parser.ParseArguments(args);
-                                //Console.WriteLine($"results");
-                                //results.WithParsed<Option>(o =>
-                                //{
-
-                                //});
-                                InitServiceProvider("", 
-                                    services);
+                                Parser p = new(rootCommand);
+                                var result = p.Parse(args);
+                                var connectionString = result.GetValueForOption(rootCommand.AppInsightsOption);
+                                InitServiceProvider(connectionString ?? "", services);
                             });
                     })
                 .UseDefaults()
                 .Build()
-                .Invoke(args);
+                .InvokeAsync(args);
         }
 
         /// <summary>
@@ -104,7 +83,7 @@ namespace MRLogs.Cli
                 return;
             }
 
-            //logger
+            // logging
             services.AddLogging(loggingBuilder =>
             {
                 loggingBuilder
@@ -124,8 +103,7 @@ namespace MRLogs.Cli
             // telemetry
             services.AddApplicationInsightsTelemetryWorkerService(
                 config => config.ConnectionString = connectionString);
-
-            //return services.BuildServiceProvider();
+            
         }
     }
 }
