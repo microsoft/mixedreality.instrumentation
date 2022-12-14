@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "MRLogs.Cli": {
+      "commandName": "Project",
+      "commandLineArgs": "trace --message \"Test\" -c \"InstrumentationKey=fb17daa7-5976-485c-9182-bca143c4dd33;IngestionEndpoint=https://westus-0.in.applicationinsights.azure.com/;LiveEndpoint=https://westus.livediagnostics.monitor.azure.com/\""
+    }
+  }
+}
